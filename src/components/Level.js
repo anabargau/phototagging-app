@@ -20,9 +20,6 @@ import app from '../firebase';
 function Level(props) {
   const { level } = props;
 
-  let characters;
-  let img;
-
   async function getData() {
     const db = getFirestore(app);
     const colRef = collection(db, 'game');
@@ -32,10 +29,8 @@ function Level(props) {
       docs.forEach((doc) => {
         let data = doc.data();
         if (data.level === level) {
-          console.log([data.img, data.characters]);
-          return [data.img, data.characters];
-          //let levelImage = document.getElementById('level-image');
-          //levelImage.src = img;
+          let levelImage = document.getElementById('level-image');
+          levelImage.src = data.img;
         }
       });
     } catch (error) {
@@ -43,28 +38,13 @@ function Level(props) {
     }
   }
 
-  async function getCharactersAndImg() {
-    let data = await getData();
-    console.log(data);
-    try {
-      img = data[0];
-      characters = data[1];
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
   useEffect(() => {
-    getCharactersAndImg();
+    getData();
   });
 
   return (
     <div>
-      {img ? (
-        <img src={img} alt="level" id="level-image" />
-      ) : (
-        <div>Loading...</div>
-      )}
+      <img alt="level" id="level-image" />
     </div>
   );
 }
