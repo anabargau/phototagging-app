@@ -17,3 +17,30 @@
   align-items: center;
   gap: 10px;
 }
+
+.character-image {
+  width: 50px;
+  height: 50px;
+}
+
+#characters-list {
+  display: flex;
+  gap: 30px;
+}
+
+.character {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.level-image {
+  position: relative;
+}
+
+#characters-modal {
+  position: absolute;
+  display: none;
+  background-color: azure;
+}
