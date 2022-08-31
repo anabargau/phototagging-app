@@ -76,8 +76,10 @@ function Level(props) {
   }
 
   function hideCharactersModal(event) {
-    if (event.currentTarget !== event.target) {
-      return;
+    if (event) {
+      if (event.currentTarget !== event.target) {
+        return;
+      }
     }
     let modal = document.getElementById('characters-modal');
     modal.style.display = 'none';
@@ -128,6 +130,18 @@ function Level(props) {
     }
   }
 
+  function hideWinModal() {
+    let modal = document.getElementById('win-modal');
+    modal.style.display = 'none';
+  }
+
+  function playAgain() {
+    setStartTime(new Date());
+    hideCharactersModal();
+    hideWinModal();
+    setIsFetching(true);
+  }
+
   useEffect(() => {
     getData();
   }, [isFetching]);
@@ -172,9 +186,11 @@ function Level(props) {
         )}
       </div>
       <div id="win-modal">
-        <button>X</button>
+        <button onClick={hideWinModal}>X</button>
         <div id="win-modal-text"></div>
-        <button id="play-again-btn">Play Again</button>
+        <button id="play-again-btn" onClick={playAgain}>
+          Play Again
+        </button>
         <button id="register-score-btn">Register Score</button>
       </div>
     </div>
