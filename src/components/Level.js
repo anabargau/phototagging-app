@@ -24,6 +24,7 @@ function Level(props) {
   const [characters, setCharacters] = useState([]);
   const [imgCoord, setImgCoord] = useState({ x: 0, y: 0 });
   const [startTime, setStartTime] = useState(new Date());
+  const [score, setScore] = useState(0);
   const { level } = props;
 
   async function getData() {
@@ -114,6 +115,7 @@ function Level(props) {
     if (found === characters.length) {
       let endTime = new Date();
       let seconds = calculateWinningTime(endTime);
+      setScore(seconds);
       showWinModal(seconds);
     }
   }
@@ -127,6 +129,7 @@ function Level(props) {
         prevState[index].found = true;
         return [...prevState];
       });
+      hideCharactersModal();
     }
   }
 
@@ -140,6 +143,32 @@ function Level(props) {
     hideCharactersModal();
     hideWinModal();
     setIsFetching(true);
+  }
+
+  function showScoreModal() {
+    hideWinModal();
+    let modal = document.getElementById('register-score-modal');
+    modal.style.display = 'flex';
+    let modalText = document.getElementById('score-modal-text');
+    modalText.textContent = `Score: ${score}`;
+  }
+
+  function hideScoreModal() {
+    let modal = document.getElementById('register-score-modal');
+    modal.style.display = 'none';
+  }
+
+  async function submitScore() {
+    const db = getFirestore(app);
+    let docRef = doc(collection(db, 'leaderboard'));
+    let name = document.getElementById('player-name').value;
+    let newEntry = {
+      name: name,
+      score: score,
+      level: level,
+    };
+    await setDoc(docRef, newEntry);
+    hideScoreModal();
   }
 
   useEffect(() => {
@@ -191,7 +220,19 @@ function Level(props) {
         <button id="play-again-btn" onClick={playAgain}>
           Play Again
         </button>
-        <button id="register-score-btn">Register Score</button>
+        <button id="register-score-btn" onClick={showScoreModal}>
+          Register Score
+        </button>
+      </div>
+      <div id="register-score-modal">
+        <label htmlFor="player-name">
+          Name:
+          <input type="text" id="player-name" required></input>
+        </label>
+        <div id="score-modal-text"></div>
+        <button className="submit-score-btn" onClick={submitScore}>
+          Submit
+        </button>
       </div>
     </div>
   );
