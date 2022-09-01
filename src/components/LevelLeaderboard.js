@@ -1,17 +1,9 @@
 import {
-  addDoc,
   collection,
-  doc,
-  getDoc,
   getDocs,
   getFirestore,
-  limit,
-  onSnapshot,
   orderBy,
   query,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
   where,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -26,7 +18,11 @@ function LevelLeaderboard(props) {
     try {
       const db = getFirestore(app);
       const colRef = collection(db, 'leaderboard');
-      const q = query(colRef, where('level', '==', level));
+      const q = query(
+        colRef,
+        where('level', '==', level),
+        orderBy('score', 'asc')
+      );
       const snapshot = await getDocs(q);
       let docs = snapshot.docs;
       let array = [];
@@ -42,12 +38,12 @@ function LevelLeaderboard(props) {
 
   useEffect(() => {
     getData();
-  });
+  }, []);
 
   return (
     <div>
       {results.length === 0 ? (
-        <div>Loading...</div>
+        <div>No entries yet</div>
       ) : (
         <div>
           <div>Level {level}</div>

@@ -1,18 +1,9 @@
-import { getSpaceUntilMaxLength } from '@testing-library/user-event/dist/utils';
 import {
-  addDoc,
   collection,
   doc,
-  getDoc,
   getDocs,
   getFirestore,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
-  serverTimestamp,
   setDoc,
-  updateDoc,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import uniqid from 'uniqid';
