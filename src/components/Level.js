@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import uniqid from 'uniqid';
 import app from '../firebase';
 import { isInside, Point } from './PolygonFunction';
+import Timer from './Timer';
 
 function Level(props) {
   const [isFetching, setIsFetching] = useState(true);
@@ -16,6 +17,9 @@ function Level(props) {
   const [imgCoord, setImgCoord] = useState({ x: 0, y: 0 });
   const [startTime, setStartTime] = useState(new Date());
   const [score, setScore] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [activeTimer, setActiveTimer] = useState(true);
   const { level } = props;
 
   async function getData() {
@@ -86,13 +90,19 @@ function Level(props) {
 
   function calculateWinningTime(endTime) {
     let timeDiff = endTime - startTime;
+    milisToMinutesAndSeconds(timeDiff);
     return Math.round(timeDiff / 1000);
+  }
+
+  function milisToMinutesAndSeconds(milis) {
+    setMinutes(Math.floor(milis / 60000));
+    setSeconds(((milis % 60000) / 1000).toFixed(0));
   }
 
   function showWinModal(seconds) {
     let modal = document.getElementById('win-modal');
     let modalText = document.getElementById('win-modal-text');
-    modalText.textContent = `Congrats! You finished this level in ${seconds} seconds!`;
+    modalText.textContent = `Congrats! You finished this level in ${minutes} minutes and ${seconds} seconds`;
     modal.style.display = 'flex';
   }
 
@@ -104,6 +114,7 @@ function Level(props) {
       }
     });
     if (found === characters.length) {
+      setActiveTimer(false);
       let endTime = new Date();
       let seconds = calculateWinningTime(endTime);
       setScore(seconds);
@@ -134,9 +145,10 @@ function Level(props) {
     hideCharactersModal();
     hideWinModal();
     setIsFetching(true);
+    setActiveTimer(true);
   }
 
-  function showScoreModal() {
+  function showScoreModal(e) {
     hideWinModal();
     let modal = document.getElementById('register-score-modal');
     modal.style.display = 'flex';
@@ -157,6 +169,10 @@ function Level(props) {
       name: name,
       score: score,
       level: level,
+      minSec:
+        seconds === 60
+          ? minutes + ' min 00 s'
+          : minutes + ' min ' + (seconds < 10 ? '0' : '') + seconds + ' s',
     };
     await setDoc(docRef, newEntry);
     hideScoreModal();
@@ -177,18 +193,36 @@ function Level(props) {
       {isFetching ? (
         <div id="level-image">Loading...</div>
       ) : (
-        <div onClick={hideCharactersModal}>
-          <div id="characters-list" onClick={hideCharactersModal}>
-            {characters.map((character) => (
-              <div className="character" key={uniqid()}>
-                <img
-                  src={character.img}
-                  alt={'character'}
-                  className="character-image"
-                />
-                <div className="character-name">{character.name}</div>
+        <div className="level-container" onClick={hideCharactersModal}>
+          <div className="level-header">
+            <div id="characters-list" onClick={hideCharactersModal}>
+              {characters.map((character) => (
+                <div
+                  className={character.found ? 'character found' : 'character'}
+                  key={uniqid()}
+                >
+                  <img
+                    src={character.img}
+                    alt={'character'}
+                    className="character-image"
+                  />
+                  <div className="character-name">{character.name}</div>
+                </div>
+              ))}
+            </div>
+            {activeTimer ? (
+              <Timer />
+            ) : (
+              <div className="level-timer">
+                {seconds === 60
+                  ? minutes + ' min 00 s'
+                  : minutes +
+                    ' min ' +
+                    (seconds < 10 ? '0' : '') +
+                    seconds +
+                    ' s'}
               </div>
-            ))}
+            )}
           </div>
           <img alt="level" id="level-image" onClick={handleImgClick} />
         </div>
@@ -211,7 +245,7 @@ function Level(props) {
         <button id="play-again-btn" onClick={playAgain}>
           Play Again
         </button>
-        <button id="register-score-btn" onClick={showScoreModal}>
+        <button type="submit" id="register-score-btn" onClick={showScoreModal}>
           Register Score
         </button>
       </div>

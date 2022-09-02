@@ -28,7 +28,11 @@ function LevelLeaderboard(props) {
       let array = [];
       docs.forEach((doc) => {
         let data = doc.data();
-        array.push({ name: data.name, score: data.score });
+        array.push({
+          name: data.name,
+          score: data.score,
+          minSec: data.minSec,
+        });
       });
       setResults(array);
     } catch (error) {
@@ -38,24 +42,29 @@ function LevelLeaderboard(props) {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [level]);
 
   return (
-    <div>
+    <div className="leaderboard-container">
       {results.length === 0 ? (
-        <div>No entries yet</div>
+        <div className="no-entries">No entries yet</div>
       ) : (
-        <div>
-          <div>Level {level}</div>
+        <table className="leaderboard-list">
+          <tr>
+            <th>Position</th>
+            <th>Name</th>
+            <th>Time</th>
+          </tr>
           {results.map((result, index) => {
             return (
-              <div key={uniqid()}>
-                {index}
-                {result.name} {result.score}
-              </div>
+              <tr className="leaderboard-entry" key={uniqid()}>
+                <td className="entry-index">{index + 1}</td>
+                <td className="entry-name">{result.name} </td>
+                <td className="entry-score">{result.minSec}</td>
+              </tr>
             );
           })}
-        </div>
+        </table>
       )}
     </div>
   );

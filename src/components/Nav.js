@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 function Nav() {
   return (
-    <div>
+    <div className="nav">
       <Link to="/">Home</Link>
-      <Link to="leaderboard">Leaderboard</Link>
+      <Link to="leaderboard/level1">Leaderboard</Link>
     </div>
   );
 }
