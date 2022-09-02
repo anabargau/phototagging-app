@@ -50,20 +50,24 @@ function LevelLeaderboard(props) {
         <div className="no-entries">No entries yet</div>
       ) : (
         <table className="leaderboard-list">
-          <tr>
-            <th>Position</th>
-            <th>Name</th>
-            <th>Time</th>
-          </tr>
-          {results.map((result, index) => {
-            return (
-              <tr className="leaderboard-entry" key={uniqid()}>
-                <td className="entry-index">{index + 1}</td>
-                <td className="entry-name">{result.name} </td>
-                <td className="entry-score">{result.minSec}</td>
-              </tr>
-            );
-          })}
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Name</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {results.map((result, index) => {
+              return (
+                <tr className="leaderboard-entry" key={uniqid()}>
+                  <td className="entry-index">{index + 1}</td>
+                  <td className="entry-name">{result.name} </td>
+                  <td className="entry-score">{result.minSec}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       )}
     </div>

@@ -191,7 +191,9 @@ function Level(props) {
   return (
     <div>
       {isFetching ? (
-        <div id="level-image">Loading...</div>
+        <div id="level-image" className="loading-message">
+          Loading...
+        </div>
       ) : (
         <div className="level-container" onClick={hideCharactersModal}>
           <div className="level-header">
