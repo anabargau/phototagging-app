@@ -17,7 +17,6 @@ function Level(props) {
   const [imgCoord, setImgCoord] = useState({ x: 0, y: 0 });
   const [startTime, setStartTime] = useState(new Date());
   const [score, setScore] = useState(0);
-  const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [activeTimer, setActiveTimer] = useState(true);
   const { level } = props;
@@ -65,8 +64,11 @@ function Level(props) {
 
   function handleImgClick(event) {
     setImgCoord({
-      x: event.clientX - event.target.offsetLeft,
-      y: event.clientY - event.target.offsetTop,
+      x:
+        event.clientX -
+        event.target.offsetLeft +
+        event.currentTarget.scrollLeft,
+      y: event.clientY - event.target.offsetTop + document.body.scrollTop,
     });
     displayCharactersModal(event.clientX, event.clientY);
   }
@@ -90,19 +92,18 @@ function Level(props) {
 
   function calculateWinningTime(endTime) {
     let timeDiff = endTime - startTime;
-    milisToMinutesAndSeconds(timeDiff);
-    return Math.round(timeDiff / 1000);
+    let totalSeconds = milisToSeconds(timeDiff);
+    return totalSeconds;
   }
 
-  function milisToMinutesAndSeconds(milis) {
-    setMinutes(Math.floor(milis / 60000));
-    setSeconds(((milis % 60000) / 1000).toFixed(0));
+  function milisToSeconds(milis) {
+    return ((milis / 1000) % 60).toFixed(3);
   }
 
   function showWinModal(seconds) {
     let modal = document.getElementById('win-modal');
     let modalText = document.getElementById('win-modal-text');
-    modalText.textContent = `Congrats! You finished this level in ${minutes} minutes and ${seconds} seconds`;
+    modalText.textContent = `Congrats! You finished this level in ${seconds} seconds!`;
     modal.style.display = 'flex';
   }
 
@@ -169,10 +170,6 @@ function Level(props) {
       name: name,
       score: score,
       level: level,
-      minSec:
-        seconds === 60
-          ? minutes + ' min 00 s'
-          : minutes + ' min ' + (seconds < 10 ? '0' : '') + seconds + ' s',
     };
     await setDoc(docRef, newEntry);
     hideScoreModal();
@@ -215,15 +212,7 @@ function Level(props) {
             {activeTimer ? (
               <Timer />
             ) : (
-              <div className="level-timer">
-                {seconds === 60
-                  ? minutes + ' min 00 s'
-                  : minutes +
-                    ' min ' +
-                    (seconds < 10 ? '0' : '') +
-                    seconds +
-                    ' s'}
-              </div>
+              <div className="level-timer">{score + ' s'}</div>
             )}
           </div>
           <img alt="level" id="level-image" onClick={handleImgClick} />
@@ -242,14 +231,22 @@ function Level(props) {
         )}
       </div>
       <div id="win-modal">
-        <button onClick={hideWinModal}>X</button>
+        <button onClick={hideWinModal} className="close-win-modal">
+          X
+        </button>
         <div id="win-modal-text"></div>
-        <button id="play-again-btn" onClick={playAgain}>
-          Play Again
-        </button>
-        <button type="submit" id="register-score-btn" onClick={showScoreModal}>
-          Register Score
-        </button>
+        <div className="win-modal-btns">
+          <button id="play-again-btn" onClick={playAgain}>
+            Play Again
+          </button>
+          <button
+            type="submit"
+            id="register-score-btn"
+            onClick={showScoreModal}
+          >
+            Register Score
+          </button>
+        </div>
       </div>
       <div id="register-score-modal">
         <label htmlFor="player-name">

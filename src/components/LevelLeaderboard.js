@@ -31,7 +31,6 @@ function LevelLeaderboard(props) {
         array.push({
           name: data.name,
           score: data.score,
-          minSec: data.minSec,
         });
       });
       setResults(array);
@@ -54,7 +53,7 @@ function LevelLeaderboard(props) {
             <tr>
               <th>Position</th>
               <th>Name</th>
-              <th>Time</th>
+              <th>Time(seconds)</th>
             </tr>
           </thead>
           <tbody>
@@ -63,7 +62,7 @@ function LevelLeaderboard(props) {
                 <tr className="leaderboard-entry" key={uniqid()}>
                   <td className="entry-index">{index + 1}</td>
                   <td className="entry-name">{result.name} </td>
-                  <td className="entry-score">{result.minSec}</td>
+                  <td className="entry-score">{result.score}</td>
                 </tr>
               );
             })}

@@ -1,6 +1,8 @@
 :root {
   --color-title-blue: #139cd9;
   --color-title-red: #c32732;
+  --color-transparent-grey: #f5f5f5e6;
+  --color-solid-dark-grey: #d4d4d4;
 }
 
 @font-face {
@@ -71,7 +73,7 @@ a {
 }
 
 table, td, th {
-  border: 2px solid black;
+  border-bottom: 2px solid var(--color-solid-dark-grey);
   padding: 15px;
   text-align: center;
 }
@@ -178,26 +180,22 @@ table th:nth-child(1) {
 #characters-modal {
   position: absolute;
   display: none;
-  background-color: azure;
-  flex-direction: column;
-}
-
-#win-modal {
-  display: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: pink;
-  width: 400px;
-  height: 400px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 80px;
+  border-radius: 10px;
+  background-color: var(--color-transparent-grey);
 }
 
+#characters-modal button {
+  width: 80px;
+  padding: 10px 5px;
+  border: none;
+  background-color: var(--color-transparent-grey);
+}
+
+#win-modal,
 #register-score-modal {
   display: none;
   position: absolute;
@@ -206,10 +204,71 @@ table th:nth-child(1) {
   top: 0;
   bottom: 0;
   margin: auto;
-  background-color: pink;
+  background-color: var(--color-transparent-grey);
   width: 400px;
-  height: 400px;
+  height: max-content;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 25px 50px;
+  gap: 40px;
+  border-radius: 8px;
+}
+
+#win-modal button,
+#register-score-modal button {
+  background-color: var(--color-solid-dark-grey);
+}
+
+button:hover {
+  filter: brightness(80%);
+}
+
+.close-win-modal {
+  align-self: flex-end;
+  border-radius: 50%;
+  border: none;
+  padding: 8px;
+  text-align: center;
+  font-size: 10px;
+  width: 30px;
+  height: auto;
+}
+
+.win-modal-btns {
+  display: flex;
+  flex-direction: row;
+  gap: 80px;
+}
+
+#register-score-btn,
+#play-again-btn,
+.submit-score-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 15px;
+  width: 150px;
+}
+
+#win-modal-text {
+  text-align: center;
+}
+
+#register-score-modal {
+  gap: 30px;
+  padding: 40px 50px;
+}
+
+#register-score-modal label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+#register-score-modal input {
+  border-radius: 8px;
+  outline: none;
+  border: 1px solid var(--color-solid-dark-grey);
+  padding: 6px;
 }
