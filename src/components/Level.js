@@ -6,10 +6,12 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import uniqid from 'uniqid';
 import app from '../firebase';
+import CharactersModal from './CharactersModal';
+import LevelHeader from './LevelHeader';
 import { isInside, Point } from './PolygonFunction';
-import Timer from './Timer';
+import RegisterScoreModal from './RegisterScoreModal';
+import WinModal from './WinModal';
 
 function Level(props) {
   const [isFetching, setIsFetching] = useState(true);
@@ -17,8 +19,7 @@ function Level(props) {
   const [imgCoord, setImgCoord] = useState({ x: 0, y: 0 });
   const [startTime, setStartTime] = useState(new Date());
   const [score, setScore] = useState(0);
-  const [seconds, setSeconds] = useState(0);
-  const [activeTimer, setActiveTimer] = useState(true);
+  const [activeTimer, setActiveTimer] = useState(false);
   const { level } = props;
 
   async function getData() {
@@ -52,6 +53,7 @@ function Level(props) {
         new Point(obj[k][2].x, obj[k][2].y),
         new Point(obj[k][3].x, obj[k][3].y),
       ];
+      console.log(polygon);
       array.push({
         name: k,
         img: obj[k][4],
@@ -63,14 +65,18 @@ function Level(props) {
   }
 
   function handleImgClick(event) {
-    setImgCoord({
-      x:
-        event.clientX -
-        event.target.offsetLeft +
-        event.currentTarget.scrollLeft,
-      y: event.clientY - event.target.offsetTop + document.body.scrollTop,
-    });
-    displayCharactersModal(event.clientX, event.clientY);
+    let parent = event.target.parentNode;
+    if (activeTimer === true) {
+      setImgCoord({
+        x: event.clientX - parent.offsetLeft + window.scrollX,
+        y: event.clientY - parent.offsetTop + window.scrollY,
+      });
+      displayCharactersModal(
+        event.clientX + window.scrollX,
+        event.clientY + window.scrollY
+      );
+      console.log(imgCoord.x, imgCoord.y);
+    }
   }
 
   function hideCharactersModal(event) {
@@ -83,7 +89,7 @@ function Level(props) {
     modal.style.display = 'none';
   }
 
-  function displayCharactersModal(x, y, event) {
+  function displayCharactersModal(x, y) {
     let modal = document.getElementById('characters-modal');
     modal.style.display = 'block';
     modal.style.top = y + 15 + 'px';
@@ -101,6 +107,7 @@ function Level(props) {
   }
 
   function showWinModal(seconds) {
+    window.scrollTo(0, 0);
     let modal = document.getElementById('win-modal');
     let modalText = document.getElementById('win-modal-text');
     modalText.textContent = `Congrats! You finished this level in ${seconds} seconds!`;
@@ -133,6 +140,8 @@ function Level(props) {
         return [...prevState];
       });
       hideCharactersModal();
+    } else {
+      console.log('wrong');
     }
   }
 
@@ -146,7 +155,23 @@ function Level(props) {
     hideCharactersModal();
     hideWinModal();
     setIsFetching(true);
+    setScore(0);
+  }
+
+  function startLevel() {
     setActiveTimer(true);
+    removeBlur();
+    hideStartBtn();
+  }
+
+  function removeBlur() {
+    let img = document.getElementById('level-image');
+    img.style.filter = 'blur(0px)';
+  }
+
+  function hideStartBtn() {
+    let btn = document.getElementById('start-btn');
+    btn.style.display = 'none';
   }
 
   function showScoreModal(e) {
@@ -163,16 +188,21 @@ function Level(props) {
   }
 
   async function submitScore() {
-    const db = getFirestore(app);
-    let docRef = doc(collection(db, 'leaderboard'));
     let name = document.getElementById('player-name').value;
-    let newEntry = {
-      name: name,
-      score: score,
-      level: level,
-    };
-    await setDoc(docRef, newEntry);
-    hideScoreModal();
+    let invalid = document.getElementById('invalid-input');
+    if (name === '') {
+      invalid.style.display = 'block';
+    } else {
+      const db = getFirestore(app);
+      let docRef = doc(collection(db, 'leaderboard'));
+      let newEntry = {
+        name: name,
+        score: score,
+        level: level,
+      };
+      await setDoc(docRef, newEntry);
+      hideScoreModal();
+    }
   }
 
   useEffect(() => {
@@ -193,71 +223,31 @@ function Level(props) {
         </div>
       ) : (
         <div className="level-container" onClick={hideCharactersModal}>
-          <div className="level-header">
-            <div id="characters-list" onClick={hideCharactersModal}>
-              {characters.map((character) => (
-                <div
-                  className={character.found ? 'character found' : 'character'}
-                  key={uniqid()}
-                >
-                  <img
-                    src={character.img}
-                    alt={'character'}
-                    className="character-image"
-                  />
-                  <div className="character-name">{character.name}</div>
-                </div>
-              ))}
-            </div>
-            {activeTimer ? (
-              <Timer />
-            ) : (
-              <div className="level-timer">{score + ' s'}</div>
-            )}
+          <LevelHeader
+            activeTimer={activeTimer}
+            hideCharactersModal={hideCharactersModal}
+            characters={characters}
+            score={score}
+            startLevel={startLevel}
+          />
+          <div className="image-container">
+            <img alt="level" id="level-image" onClick={handleImgClick} />
+            <button id="start-btn" onClick={startLevel}>
+              START
+            </button>
           </div>
-          <img alt="level" id="level-image" onClick={handleImgClick} />
         </div>
       )}
-      <div id="characters-modal">
-        {characters.map((character) =>
-          character.found ? null : (
-            <button
-              onClick={() => checkIfCorrectCharacter(character)}
-              key={uniqid()}
-            >
-              {character.name}
-            </button>
-          )
-        )}
-      </div>
-      <div id="win-modal">
-        <button onClick={hideWinModal} className="close-win-modal">
-          X
-        </button>
-        <div id="win-modal-text"></div>
-        <div className="win-modal-btns">
-          <button id="play-again-btn" onClick={playAgain}>
-            Play Again
-          </button>
-          <button
-            type="submit"
-            id="register-score-btn"
-            onClick={showScoreModal}
-          >
-            Register Score
-          </button>
-        </div>
-      </div>
-      <div id="register-score-modal">
-        <label htmlFor="player-name">
-          Name:
-          <input type="text" id="player-name" required></input>
-        </label>
-        <div id="score-modal-text"></div>
-        <button className="submit-score-btn" onClick={submitScore}>
-          Submit
-        </button>
-      </div>
+      <CharactersModal
+        characters={characters}
+        checkIfCorrectCharacter={checkIfCorrectCharacter}
+      />
+      <WinModal
+        hideWinModal={hideWinModal}
+        playAgain={playAgain}
+        showScoreModal={showScoreModal}
+      />
+      <RegisterScoreModal submitScore={submitScore} />
     </div>
   );
 }
