@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/phototagging-app/static/css/main.f7c39d22.css",
-    "main.js": "/phototagging-app/static/js/main.6389b545.js",
+    "main.css": "/phototagging-app/static/css/main.63048c55.css",
+    "main.js": "/phototagging-app/static/js/main.7cfcae92.js",
     "static/media/level2.jpg": "/phototagging-app/static/media/level2.cbda96b1bc9574b2883b.jpg",
     "static/media/level4.jpg": "/phototagging-app/static/media/level4.8ad7284f66614fbf2fa4.jpg",
     "static/media/level3.jpg": "/phototagging-app/static/media/level3.3e3e1cd7e2a1856d607d.jpg",
@@ -9,11 +9,11 @@
     "static/media/Optima-ExtraBlack.otf": "/phototagging-app/static/media/Optima-ExtraBlack.5e2ac49b9dd02960fd1e.otf",
     "static/media/waldo-title.jpg": "/phototagging-app/static/media/waldo-title.a021db903d06012b257c.jpg",
     "index.html": "/phototagging-app/index.html",
-    "main.f7c39d22.css.map": "/phototagging-app/static/css/main.f7c39d22.css.map",
-    "main.6389b545.js.map": "/phototagging-app/static/js/main.6389b545.js.map"
+    "main.63048c55.css.map": "/phototagging-app/static/css/main.63048c55.css.map",
+    "main.7cfcae92.js.map": "/phototagging-app/static/js/main.7cfcae92.js.map"
   },
   "entrypoints": [
-    "static/css/main.f7c39d22.css",
-    "static/js/main.6389b545.js"
+    "static/css/main.63048c55.css",
+    "static/js/main.7cfcae92.js"
   ]
 }
