@@ -1,4 +1,4 @@
-let INF = 1000;
+let INF = 10000;
 
 class Point {
   constructor(x, y) {

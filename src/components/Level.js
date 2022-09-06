@@ -133,11 +133,14 @@ function Level(props) {
     let polygon = character.polygon;
     let point = new Point(imgCoord.x, imgCoord.y);
     if (isInside(polygon, polygon.length, point)) {
+      console.log('correct');
       setCharacters((prevState) => {
         prevState[index].found = true;
         return [...prevState];
       });
       hideCharactersModal();
+    } else {
+      console.log('wrong');
     }
   }
 
