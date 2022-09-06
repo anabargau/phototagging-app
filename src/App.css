@@ -306,3 +306,11 @@ button:hover {
 .image-container {
   position: relative;
 }
+
+.correct:active {
+  background-color: green;
+}
+
+.incorrect:active {
+  background-color: red;
+}

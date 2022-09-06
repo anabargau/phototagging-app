@@ -53,7 +53,6 @@ function Level(props) {
         new Point(obj[k][2].x, obj[k][2].y),
         new Point(obj[k][3].x, obj[k][3].y),
       ];
-      console.log(polygon);
       array.push({
         name: k,
         img: obj[k][4],
@@ -75,7 +74,6 @@ function Level(props) {
         event.clientX + window.scrollX,
         event.clientY + window.scrollY
       );
-      console.log(imgCoord.x, imgCoord.y);
     }
   }
 
@@ -122,8 +120,8 @@ function Level(props) {
       }
     });
     if (found === characters.length) {
-      setActiveTimer(false);
       let endTime = new Date();
+      setActiveTimer(false);
       let seconds = calculateWinningTime(endTime);
       setScore(seconds);
       showWinModal(seconds);
@@ -140,8 +138,6 @@ function Level(props) {
         return [...prevState];
       });
       hideCharactersModal();
-    } else {
-      console.log('wrong');
     }
   }
 
