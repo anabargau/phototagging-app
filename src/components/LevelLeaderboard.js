@@ -18,21 +18,20 @@ function LevelLeaderboard(props) {
     try {
       const db = getFirestore(app);
       const colRef = collection(db, 'leaderboard');
-      const q = query(
-        colRef,
-        where('level', '==', level),
-        orderBy('score', 'asc')
-      );
+      const q = query(colRef, where('level', '==', level), orderBy('score'));
       const snapshot = await getDocs(q);
       let docs = snapshot.docs;
+      console.log(docs);
       let array = [];
       docs.forEach((doc) => {
         let data = doc.data();
+        console.log(data.score);
         array.push({
           name: data.name,
           score: data.score,
         });
       });
+      console.log(array);
       setResults(array);
     } catch (error) {
       console.log(error.message);

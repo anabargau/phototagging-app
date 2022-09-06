@@ -196,7 +196,7 @@ function Level(props) {
       let docRef = doc(collection(db, 'leaderboard'));
       let newEntry = {
         name: name,
-        score: score,
+        score: parseFloat(score),
         level: level,
       };
       await setDoc(docRef, newEntry);
