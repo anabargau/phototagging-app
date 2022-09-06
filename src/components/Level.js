@@ -8,6 +8,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import app from '../firebase';
 import CharactersModal from './CharactersModal';
+import LeaderboardModal from './LeaderboardModal';
 import LevelHeader from './LevelHeader';
 import { isInside, Point } from './PolygonFunction';
 import RegisterScoreModal from './RegisterScoreModal';
@@ -133,14 +134,11 @@ function Level(props) {
     let polygon = character.polygon;
     let point = new Point(imgCoord.x, imgCoord.y);
     if (isInside(polygon, polygon.length, point)) {
-      console.log('correct');
       setCharacters((prevState) => {
         prevState[index].found = true;
         return [...prevState];
       });
       hideCharactersModal();
-    } else {
-      console.log('wrong');
     }
   }
 
@@ -186,6 +184,11 @@ function Level(props) {
     modal.style.display = 'none';
   }
 
+  function showLeaderboardModal() {
+    let modal = document.getElementById('leaderboard-modal');
+    modal.style.display = 'flex';
+  }
+
   async function submitScore() {
     let name = document.getElementById('player-name').value;
     let invalid = document.getElementById('invalid-input');
@@ -202,6 +205,7 @@ function Level(props) {
       await setDoc(docRef, newEntry);
       hideScoreModal();
     }
+    showLeaderboardModal();
   }
 
   useEffect(() => {
@@ -247,6 +251,7 @@ function Level(props) {
         showScoreModal={showScoreModal}
       />
       <RegisterScoreModal submitScore={submitScore} />
+      <LeaderboardModal level={level} />
     </div>
   );
 }

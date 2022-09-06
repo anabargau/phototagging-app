@@ -52,7 +52,7 @@ a {
   color: black;
 }
 
-.leader-nav-link.clicked {
+[aria-current="page"] {
   text-decoration: solid underline 4px;
   text-underline-offset: 3px;
 }
@@ -196,14 +196,23 @@ table th:nth-child(1) {
 }
 
 #characters-modal button {
-  width: 80px;
-  padding: 10px 5px;
+  width: 100px;
+  padding: 10px 10px;
   border: none;
   background-color: var(--color-transparent-grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.character-btn-img {
+  height: 30px;
 }
 
 #win-modal,
-#register-score-modal {
+#register-score-modal,
+#leaderboard-modal {
   display: none;
   position: absolute;
   left: 0;
@@ -223,7 +232,8 @@ table th:nth-child(1) {
 }
 
 #win-modal button,
-#register-score-modal button {
+#register-score-modal button,
+#leaderboard-modal button {
   background-color: var(--color-solid-dark-grey);
 }
 
@@ -307,10 +317,8 @@ button:hover {
   position: relative;
 }
 
-.correct:active {
-  background-color: green;
-}
-
-.incorrect:active {
-  background-color: red;
+#leaderboard-modal button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 15px;
 }

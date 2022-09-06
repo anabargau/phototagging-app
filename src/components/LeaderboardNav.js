@@ -1,38 +1,21 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 function LeaderboardNav() {
-  function getLinks() {
-    let links = document.getElementsByClassName('leader-nav-link');
-    let linksArr = [...links];
-    return linksArr;
-  }
-
-  function toggle(event) {
-    let linksArr = getLinks();
-    linksArr.forEach((link) => {
-      if (link === event.target) {
-        link.classList.add('clicked');
-      } else {
-        link.classList.remove('clicked');
-      }
-    });
-  }
-
   return (
     <div className="leaderboard-nav">
-      <Link to="level1" className="leader-nav-link clicked" onClick={toggle}>
+      <NavLink to="level1" className="leaderboard-nav-link">
         Level 1
-      </Link>
-      <Link to="level2" className="leader-nav-link" onClick={toggle}>
+      </NavLink>
+      <NavLink to="level2" className="leader-nav-link">
         Level 2
-      </Link>
-      <Link to="level3" className="leader-nav-link" onClick={toggle}>
+      </NavLink>
+      <NavLink to="level3" className="leader-nav-link">
         Level 3
-      </Link>
-      <Link to="level4" className="leader-nav-link" onClick={toggle}>
+      </NavLink>
+      <NavLink to="level4" className="leader-nav-link">
         Level 4
-      </Link>
+      </NavLink>
     </div>
   );
 }

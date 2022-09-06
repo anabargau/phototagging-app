@@ -12,6 +12,7 @@ function CharactersModal(props) {
             key={uniqid()}
           >
             {character.name}
+            <img className="character-btn-img" src={character.img} />
           </button>
         )
       )}
