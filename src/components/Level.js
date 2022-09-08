@@ -187,6 +187,8 @@ function Level(props) {
   function showLeaderboardModal() {
     let modal = document.getElementById('leaderboard-modal');
     modal.style.display = 'flex';
+    let scoreModal = document.getElementById('register-score-modal');
+    scoreModal.style.display = 'none';
   }
 
   async function submitScore() {

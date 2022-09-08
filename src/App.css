@@ -229,6 +229,7 @@ table th:nth-child(1) {
   padding: 25px 50px;
   gap: 40px;
   border-radius: 8px;
+  z-index: 2;
 }
 
 #win-modal button,
