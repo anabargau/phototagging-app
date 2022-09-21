@@ -2,7 +2,6 @@
 ## What it does?
 This is an app insipred by the popular game 'Where's Waldo?', where you have to find Waldo and his friends in a photo cluttered with many other characters. This particular version of the game lets you choose between 4 photos. Every photo has a list of characters that you have to find, which will be displayed at the top of the photo. After you click the 'Start' button, a timer will start running until all the characters are found. After that, you can choose to register your score in the leaderboard for that specific level and you will be taken there to see which position you occupy.
 ## Techonolgies used:
-* JavaScript
 * React
 * React Router
 * Firebase
